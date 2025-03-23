@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using UserApi.Data;
+using UserApi.Repositories.UserRepositories;
+using UserApi.Services.UserService;
+using UserService = UserApi.Services.UserService.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +34,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseNpgsql(dBConnectionString);
 });
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
