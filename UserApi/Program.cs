@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using UserApi.Data;
@@ -25,6 +26,11 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<DataContext>();
+
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseNpgsql(dBConnectionString);
+});
 
 var app = builder.Build();
 
