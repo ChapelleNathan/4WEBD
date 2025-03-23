@@ -1,4 +1,7 @@
 using System.Text;
+using AuthApi.Helper;
+using AuthApi.Services.AuthService;
+using AuthApi.Services.web.UserWebService;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -19,6 +22,8 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
+builder.Services.AddControllersWithViews();
+
 builder.Services.AddAuthentication().AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -32,6 +37,11 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
     };
 });
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserWebService, UserWebService>();
+builder.Services.AddSingleton<AuthHelper>();
+builder.Services.AddSingleton<HttpClient>();
+
 var app = builder.Build();
 
 app.UseSwagger();
@@ -39,7 +49,6 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
