@@ -1,0 +1,52 @@
+﻿services:
+  userapi:
+    image: userapi
+    build:
+      context: .
+      dockerfile: UserApi/Dockerfile
+    depends_on:
+      - postgres
+
+  ticketapi:
+    image: ticketapi
+    build:
+      context: .
+      dockerfile: TicketApi/Dockerfile
+
+  notificationapi:
+    image: notificationapi
+    build:
+      context: .
+      dockerfile: NotificationApi/Dockerfile
+
+  eventapi:
+    image: eventapi
+    build:
+      context: .
+      dockerfile: EventApi/Dockerfile
+
+  authapi:
+    image: authapi
+    build:
+      context: .
+      dockerfile: AuthApi/Dockerfile
+      
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - db
+
+networks:
+  db:
+    driver: bridge
+volumes:
+  postgres-data:
